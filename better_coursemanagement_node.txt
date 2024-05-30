@@ -1,0 +1,76 @@
+// Import required modules
+const mysql = require('mysql2');
+// Create MySQL connection
+const connection = mysql.createConnection({
+host: 'localhost',
+user: 'root',
+password: 'swanand@2004',
+database: 'awtlass7'
+});
+// Connect to MySQL
+connection.connect((err) => {
+if (err) {
+console.error('Error connecting to MySQL database:', err);
+return;
+}
+console.log('Connected to MySQL database');
+// Example usage:
+// Create a new course
+const newCourse = { name: 'Node.js Basics', description: 'Learn the
+fundamentals of Node.js' };
+createCourse(newCourse);
+// Get all courses
+getAllCourses();
+// Update a course (assuming 'id' is the ID of the course to be updated)
+const courseIdToUpdate = 1;
+const updatedCourseData = { name: 'AWTL', description: 'We learn about
+Advance web technology!' };
+updateCourse(courseIdToUpdate, updatedCourseData);
+// Delete a course (assuming 'id' is the ID of the course to be deleted)
+const courseIdToDelete = 2;
+deleteCourse(courseIdToDelete);
+// Don't forget to close the MySQL connection when done
+connection.end();
+});
+// Define CRUD functions
+// Create a new course
+function createCourse(course) {
+connection.query('INSERT INTO courses SET ?', course, (err, result) => {
+if (err) {
+console.error('Error creating course:', err);
+return;
+}
+console.log('Course created successfully');
+});
+}
+// Get all courses
+function getAllCourses() {
+connection.query('SELECT * FROM courses', (err, results) => {
+if (err) {
+console.error('Error fetching courses:', err);
+return;
+}
+console.log('All courses:', results);
+});
+}
+// Update a course
+function updateCourse(id, newCourseData) {
+connection.query('UPDATE courses SET ? WHERE id = ?', [newCourseData, id],
+(err, result) => {
+if (err) {
+console.error('Error updating course:', err);
+return;
+}
+console.log('Course updated successfully');
+});
+}
+// Delete a course
+function deleteCourse(id) {
+connection.query('DELETE FROM courses WHERE id = ?', id, (err, result) => {
+if (err) {
+console.error('Error deleting course:', err);
+return;
+}
+console.log('Course deleted successfully');
+});
+}
