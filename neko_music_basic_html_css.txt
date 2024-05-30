@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neko Music Login</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-size: cover;
+            background-position: center;
+            color: #FFF;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #282c35;
+        }
+
+        .login-container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            width: 400px;
+            text-align: center;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .success-container {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            animation: fadeOut 4s forwards; /* Apply the fadeOut animation */
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #555;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s ease-in-out;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #4caf50;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 14px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .error-message {
+            color: #ff4d4d;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container" id="loginContainer">
+        <h2>User Login</h2>
+        <form id="loginForm" onsubmit="validateForm(event)">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
+            <button type="submit">Login</button>
+        </form>
+        <p class="error-message" id="errorMessage"></p>
+    </div>
+
+    <!-- Success container initially hidden -->
+    <div class="success-container" id="successContainer" style="display: none;">
+        Login Successful!
+    </div>
+
+    <script>
+        var backgroundImages = [
+            'https://musictech.com/wp-content/uploads/2022/05/MT-FLUME-HERO@2560x1625.jpg',
+            'https://edm.com/.image/ar_16:9%2Cc_fill%2Cs_rgb%2Cfl_progressive%2Cg_xy_center%2Cq_auto:good%2Cw_768%2Cx_765%2Cy_275/MTg1NjM3MzcwNjcyOTgxMzk2/odesza-2018-press-photo-cr-shore-fire-media-billboard-1548.jpg',
+            'https://pechangaarenasd.com/wp-content/uploads/porter-robinson-750x400-1.jpg',
+            'https://e0.pxfuel.com/wallpapers/533/843/desktop-wallpaper-madeon-store-madeon-madeon-good-faith.jpg'
+        ];
+
+        var randomIndex = Math.floor(Math.random() * backgroundImages.length);
+        var randomImage = backgroundImages[randomIndex];
+
+        document.body.style.backgroundImage = 'url("' + randomImage + '")';
+
+        function validateForm(event) {
+            event.preventDefault();
+
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+            var errorMessage = document.getElementById('errorMessage');
+            var loginContainer = document.getElementById('loginContainer');
+            var successContainer = document.getElementById('successContainer');
+
+            if (username === 'Swanand' && password === 'pass') {
+                errorMessage.textContent = '';
+                loginContainer.style.display = 'none'; // Hide the login container
+                successContainer.style.display = 'block'; // Show the success container
+                setTimeout(function () {
+                    successContainer.style.display = 'none'; // Hide the success container after 2 seconds
+                    loginContainer.style.display = 'flex'; // Show the login container again
+                }, 2000);
+            } else {
+                errorMessage.textContent = 'Invalid username or password';
+            }
+        }
+    </script>
+</body>
+</html>
