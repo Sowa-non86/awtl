@@ -1,0 +1,140 @@
+server.js 
+
+
+const express = require('express');
+const bodyParser = require('body-parser');
+const mysql = require('mysql2');
+
+const app = express();
+app.use(bodyParser.json());
+
+const connection = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: 'swanand@2004', // replace with your MySQL root password
+    database: 'course_management'
+});
+
+connection.connect((err) => {
+    if (err) throw err;
+    console.log('Connected to the MySQL server.');
+});
+
+app.post('/courses', (req, res) => {
+    const { title, description, duration } = req.body;
+    const sql = 'INSERT INTO courses (title, description, duration) VALUES (?, ?, ?)';
+    connection.query(sql, [title, description, duration], (err, result) => {
+        if (err) throw err;
+        res.send(`Course added with ID: ${result.insertId}`);
+    });
+});
+
+app.get('/courses', (req, res) => {
+    const sql = 'SELECT * FROM courses';
+    connection.query(sql, (err, results) => {
+        if (err) throw err;
+        res.json(results);
+    });
+});
+
+app.get('/courses/:id', (req, res) => {
+    const { id } = req.params;
+    const sql = 'SELECT * FROM courses WHERE id = ?';
+    connection.query(sql, [id], (err, result) => {
+        if (err) throw err;
+        res.json(result);
+    });
+});
+
+app.put('/courses/:id', (req, res) => {
+    const { id } = req.params;
+    const { title, description, duration } = req.body;
+    const sql = 'UPDATE courses SET title = ?, description = ?, duration = ? WHERE id = ?';
+    connection.query(sql, [title, description, duration, id], (err, result) => {
+        if (err) throw err;
+        res.send(`Course with ID: ${id} updated`);
+    });
+});
+
+app.delete('/courses/:id', (req, res) => {
+    const { id } = req.params;
+    const sql = 'DELETE FROM courses WHERE id = ?';
+    connection.query(sql, [id], (err, result) => {
+        if (err) throw err;
+        res.send(`Course with ID: ${id} deleted`);
+    });
+});
+
+const PORT = 3000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
+
+
+
+
+
+
+
+
+
+
+client.js:
+
+
+
+const http = require('http');
+
+const options = {
+    hostname: 'localhost',
+    port: 3000,
+    path: '/courses',
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    }
+};
+
+const data = JSON.stringify({
+    title: 'Node.js Course',
+    description: 'Learn Node.js from scratch',
+    duration: 30
+});
+
+const req = http.request(options, (res) => {
+    let responseBody = '';
+
+    res.on('data', (chunk) => {
+        responseBody += chunk;
+    });
+
+    res.on('end', () => {
+        console.log('POST Response: ', responseBody);
+
+        // After adding a course, let's get all courses
+        getAllCourses();
+    });
+});
+
+req.on('error', (e) => {
+    console.error(`Problem with request: ${e.message}`);
+});
+
+req.write(data);
+req.end();
+
+function getAllCourses() {
+    http.get('http://localhost:3000/courses', (res) => {
+        let responseBody = '';
+
+        res.on('data', (chunk) => {
+            responseBody += chunk;
+        });
+
+        res.on('end', () => {
+            console.log('GET Response: ', JSON.parse(responseBody));
+        });
+    }).on('error', (e) => {
+        console.error(`Got error: ${e.message}`);
+    });
+}
